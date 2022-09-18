@@ -8,13 +8,16 @@ class VerificationCodeScreen extends StatefulWidget {
 }
 
 class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
-  List<String> code = ['', '', '', ''];
-  int selected = 0;
 
+  // initialize a list of strings to contain our code
+  List<String> code = ['', '', '', ''];
+  // this int value to let us keep track of the active cell
+  int activeCell = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // set the background color of our page to white
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -28,7 +31,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: const Icon(
           Icons.arrow_back_ios,
           color: Colors.black,
@@ -81,12 +84,16 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                       ),
                     ),
                     Row(
+                      // MainAxisAlignment.spaceEvenly to make the cells aligns perfectly
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
                           decoration: BoxDecoration(
+                            // circular shape to the container
                             shape: BoxShape.circle,
-                            color: selected == 1
+                            // here we will check if this is the active cell
+                            // if it is the active cell its color will be white, else its will be light purple
+                            color: activeCell == 1
                                 ? const Color.fromRGBO(255, 255, 255, 1)
                                 : const Color.fromRGBO(122, 135, 230, 1),
                           ),
@@ -94,20 +101,22 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                           height: MediaQuery.of(context).size.width / 8,
                           child: Center(
                             child: Text(
+                              // text widget to display the first digit of the code
                               code[0],
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color:
-                                selected == 1 ? Colors.black : Colors.white,
+                                activeCell == 1 ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
                         ),
+                        // we will repeat the same process for the next three containers but we will change the condition for each one
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: selected == 2
+                            color: activeCell == 2
                                 ? const Color.fromRGBO(255, 255, 255, 1)
                                 : const Color.fromRGBO(122, 135, 230, 1),
                           ),
@@ -120,7 +129,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color:
-                                selected == 2 ? Colors.black : Colors.white,
+                                activeCell == 2 ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -128,7 +137,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: selected == 3
+                            color: activeCell == 3
                                 ? const Color.fromRGBO(255, 255, 255, 1)
                                 : const Color.fromRGBO(122, 135, 230, 1),
                           ),
@@ -141,7 +150,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color:
-                                selected == 3 ? Colors.black : Colors.white,
+                                activeCell == 3 ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -149,7 +158,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: selected == 4
+                            color: activeCell == 4
                                 ? const Color.fromRGBO(255, 255, 255, 1)
                                 : const Color.fromRGBO(122, 135, 230, 1),
                           ),
@@ -162,7 +171,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color:
-                                selected == 4 ? Colors.black : Colors.white,
+                                activeCell == 4 ? Colors.black : Colors.white,
                               ),
                             ),
                           ),
@@ -172,7 +181,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                     Center(
                       child: TextButton(
                         onPressed: () {
-
+                          // API call to resend the verification code from the server
                         },
                         child: const Text(
                           'Resend code',
@@ -186,7 +195,9 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                     ),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // API call to verify the code that entered by the user
+                        },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(122, 135, 230, 1),),
                           shape: MaterialStateProperty.all<OutlinedBorder?>(
@@ -221,12 +232,15 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
+                              // each child of the column will be a button
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  // onPressed first we will check that we didn't pass four digits
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '1';
-                                    selected = selected + 1;
+                                      // this is button number 1 so wwe will but '1' value in the current active cell, store that value in our list and then increase the active cell value by one
+                                    code[activeCell] = '1';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -241,10 +255,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '4';
-                                    selected = selected + 1;
+                                    code[activeCell] = '4';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -259,10 +273,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '7';
-                                    selected = selected + 1;
+                                    code[activeCell] = '7';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -290,10 +304,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '2';
-                                    selected = selected + 1;
+                                    code[activeCell] = '2';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -308,10 +322,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '5';
-                                    selected = selected + 1;
+                                    code[activeCell] = '5';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -326,10 +340,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '8';
-                                    selected = selected + 1;
+                                    code[activeCell] = '8';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -344,10 +358,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '0';
-                                    selected = selected + 1;
+                                    code[activeCell] = '0';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -367,10 +381,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '3';
-                                    selected = selected + 1;
+                                    code[activeCell] = '3';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -385,10 +399,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '6';
-                                    selected = selected + 1;
+                                    code[activeCell] = '6';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -403,10 +417,10 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  if(selected<4) {
+                                  if(activeCell<4) {
                                     setState(() {
-                                    code[selected] = '9';
-                                    selected = selected + 1;
+                                    code[activeCell] = '9';
+                                    activeCell = activeCell + 1;
                                   });
                                   }
                                 },
@@ -419,12 +433,15 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                                   ),
                                 ),
                               ),
+                              // to delete a digit from the code we will do a reverse process
                               InkWell(
                                 onTap: () {
-                                  if (selected > 0) {
+                                  // first check that we have digits to delete it
+                                  if (activeCell > 0) {
                                     setState(() {
-                                      code[selected - 1] = '';
-                                      selected = selected - 1;
+                                      // put empty string in the current active cell and decrease the active cell value
+                                      code[activeCell - 1] = '';
+                                      activeCell = activeCell - 1;
                                     });
                                   }
                                 },
